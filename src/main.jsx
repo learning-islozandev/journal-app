@@ -7,7 +7,9 @@ import { BrowserRouter } from 'react-router';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
+    {/* Configuracion de rutas... */}
+    
+    <BrowserRouter> 
       <JournalApp />
     </BrowserRouter>
   </StrictMode>,
