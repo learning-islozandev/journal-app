@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link as RouterLink } from "react-router";
 
 import { Button, Grid2, TextField, Typography, Link } from "@mui/material";
@@ -7,26 +7,29 @@ import { Google } from "@mui/icons-material";
 import { AuthLayout } from "../layout/AuthLayout";
 import { useForm } from "../../hooks";
 import { checkingAuthentication, startGoogleSignIn } from "../../store/auth";
+import { useMemo } from "react";
 
 export const LoginPage = () => {
 
   const dispatch = useDispatch();
 
-  const { email, password, onInputChange, formState } = useForm({
+  const { status } = useSelector(state => state.auth);
+
+  const { email, password, onInputChange } = useForm({
     email: 'ilozandev@gmail.com',
     password: '123456',
   });
 
   const onSubmit = (event) => {
     event.preventDefault();
-    console.log(formState);
     dispatch(checkingAuthentication());
   }
 
   const onGoogleSignIn = () => {
     dispatch(startGoogleSignIn());
-    console.log("Google Sign In");
   }
+
+  const isAuthenticated = useMemo(() => status === 'checking', [status]);
 
   return (
     <>
@@ -42,7 +45,8 @@ export const LoginPage = () => {
           </Grid2>
           <Grid2 container spacing={2} sx={{ mb: 2, mt: 1 }}>
             <Grid2 item='true' size={{ xs: 12, sm: 6 }} sx={{ mt: 2 }} >
-              <Button variant='contained' color='primary' fullWidth sx={{ height: 40 }} type="submit">
+              <Button variant='contained' color='primary' fullWidth sx={{ height: 40 }} type="submit"
+                disabled={isAuthenticated}>
                 Ingresar
               </Button>
             </Grid2>
@@ -50,6 +54,7 @@ export const LoginPage = () => {
             <Grid2 item='true' size={{ xs: 12, sm: 6 }} sx={{ mt: 2 }} >
               <Button variant='contained' color='primary' fullWidth sx={{ height: 40 }}
                 onClick={onGoogleSignIn}
+                disabled={isAuthenticated}
               >
                 <Google />
                 <Typography sx={{ ml: 1, textTransform: "capitalize" }}> Google </Typography>
