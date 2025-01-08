@@ -29,7 +29,7 @@ export const useForm = (initialForm = {}, formValidations = {}) => {
         setFormState(initialForm);
     }
 
-    const createValidators = () => {
+    const createValidators = () => { 
         const formCheckedValues = {};
         Object.keys(formValidations).forEach((key) => {
             const value = formValidations[key];

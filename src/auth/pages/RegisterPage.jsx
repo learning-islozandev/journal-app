@@ -3,6 +3,8 @@ import { Button, Grid2, TextField, Typography, Link } from "@mui/material";
 import { Link as RouterLink } from "react-router";
 import { AuthLayout } from "../layout/AuthLayout";
 import { useForm } from "../../hooks";
+import { useDispatch } from "react-redux";
+import { startCreatingUserWithEmailPassword } from "../../store/auth";
 
 const formData = {
   email: '',
@@ -36,6 +38,8 @@ const formValidations = {
 
 export const RegisterPage = () => {
 
+  const dispatch = useDispatch();
+
   const [formSubmited, setFormSubmited] = useState(false);
 
   const { onInputChange,
@@ -46,6 +50,8 @@ export const RegisterPage = () => {
     event.preventDefault();
     setFormSubmited(true);
     if (!isFormValid) return;
+
+    dispatch(startCreatingUserWithEmailPassword(formState));
   }
 
   return (
