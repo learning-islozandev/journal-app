@@ -1,28 +1,29 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link as RouterLink } from "react-router";
 
-import { Button, Grid2, TextField, Typography, Link } from "@mui/material";
+import { Button, Grid2, TextField, Typography, Link, Alert } from "@mui/material";
 import { Google } from "@mui/icons-material";
 
 import { AuthLayout } from "../layout/AuthLayout";
 import { useForm } from "../../hooks";
-import { checkingAuthentication, startGoogleSignIn } from "../../store/auth";
+import { checkingAuthentication, startGoogleSignIn, startLoginWithEmailPassword } from "../../store/auth";
 import { useMemo } from "react";
 
 export const LoginPage = () => {
 
   const dispatch = useDispatch();
 
-  const { status } = useSelector(state => state.auth);
+  const { status, errorMessage } = useSelector(state => state.auth);
 
   const { email, password, onInputChange } = useForm({
-    email: 'ilozandev@gmail.com',
-    password: '123456',
+    email: '',
+    password: '',
   });
 
   const onSubmit = (event) => {
     event.preventDefault();
-    dispatch(checkingAuthentication());
+    // dispatch(checkingAuthentication());
+    dispatch(startLoginWithEmailPassword({ email, password }));
   }
 
   const onGoogleSignIn = () => {
@@ -37,13 +38,19 @@ export const LoginPage = () => {
         <form onSubmit={onSubmit}>
           <Grid2 container>
             <Grid2 item='true' size={{ xs: 12 }} sx={{ mt: 2 }}>
-              <TextField label='Correo' type="email" placeholder="correo@gmail.com" fullWidth name="email" onChange={onInputChange} value={email} />
+              <TextField label='Correo' type="email" placeholder="correo@gmail.com" fullWidth
+                name="email" onChange={onInputChange} value={email} />
             </Grid2>
             <Grid2 item='true' size={{ xs: 12 }} sx={{ mt: 2 }}>
-              <TextField label='Contrasena' type="password" placeholder="Contrasena" fullWidth name="password" onChange={onInputChange} value={password} />
+              <TextField label='Contrasena' type="password" placeholder="Contrasena" fullWidth
+                name="password" onChange={onInputChange} value={password} />
             </Grid2>
           </Grid2>
           <Grid2 container spacing={2} sx={{ mb: 2, mt: 1 }}>
+            <Grid2 item='true' size={{ xs: 12 }} sx={{ mt: 2 }} display={!!errorMessage ? 'block' : 'none'} justifyContent={'normal'}>
+              <Alert severity="error"> {errorMessage} </Alert>
+            </Grid2>
+
             <Grid2 item='true' size={{ xs: 12, sm: 6 }} sx={{ mt: 2 }} >
               <Button variant='contained' color='primary' fullWidth sx={{ height: 40 }} type="submit"
                 disabled={isAuthenticated}>
@@ -68,7 +75,9 @@ export const LoginPage = () => {
           </Grid2>
         </form>
       </AuthLayout>
-
     </>
   )
 }
+
+
+

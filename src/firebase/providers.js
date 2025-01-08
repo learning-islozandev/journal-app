@@ -1,4 +1,12 @@
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, updateProfile } from "firebase/auth";
+import {
+    createUserWithEmailAndPassword,
+    GoogleAuthProvider,
+    signInWithEmailAndPassword,
+    signInWithPopup,
+    updateProfile
+}
+    from "firebase/auth";
+
 import { FirebaseAuth } from "./config";
 
 const googleProvider = new GoogleAuthProvider();
@@ -32,25 +40,44 @@ const signInWithGoogle = async () => {
 const registerUserWithEmailPassword = async ({ email, password, displayName }) => {
     try {
         const result = await createUserWithEmailAndPassword(FirebaseAuth, email, password);
-        const user = result.user;
-        await updateProfile(user, { displayName });
+        const { uid, photoURL } = result.user;
+        await updateProfile(FirebaseAuth.currentUser, { displayName });
+
         return {
             ok: true,
-            displayName: user.displayName,
-            email: user.email,
-            photoURL: user.photoURL,
-            uid: user.uid
+            uid, photoURL, email, displayName
         }
     } catch (error) {
+        const errorCode = error.code;
+        const errorMessage = `${errorCode}: ${error.message}`;
         return {
             ok: false,
-            errorMessage: error.message
+            errorMessage
         }
     }
 }
 
+const loginWithEmailPassword = async ({ email, password }) => {
+    try {
+        
+        const result = await signInWithEmailAndPassword(FirebaseAuth, email, password);
+        const { uid, photoURL, displayName } = result.user;
+        return {
+            ok: true,
+            uid, photoURL, email, displayName
+        }
+    } catch (error) {
+        const errorCode = error.code;
+        const errorMessage = `${errorCode}: ${error.message}`;
+        return {
+            ok: false,
+            errorMessage
+        }
+    }
+}
 
 export {
     signInWithGoogle,
-    registerUserWithEmailPassword
+    registerUserWithEmailPassword,
+    loginWithEmailPassword
 }
