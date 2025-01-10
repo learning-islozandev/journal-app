@@ -59,7 +59,7 @@ const registerUserWithEmailPassword = async ({ email, password, displayName }) =
 
 const loginWithEmailPassword = async ({ email, password }) => {
     try {
-        
+
         const result = await signInWithEmailAndPassword(FirebaseAuth, email, password);
         const { uid, photoURL, displayName } = result.user;
         return {
@@ -76,8 +76,14 @@ const loginWithEmailPassword = async ({ email, password }) => {
     }
 }
 
+const logoutFirebase = async () => {
+    return await FirebaseAuth.signOut();
+}
+
+
 export {
     signInWithGoogle,
     registerUserWithEmailPassword,
-    loginWithEmailPassword
+    loginWithEmailPassword,
+    logoutFirebase
 }

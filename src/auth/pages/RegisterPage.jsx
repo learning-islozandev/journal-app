@@ -62,7 +62,9 @@ export const RegisterPage = () => {
   return (
     <>
       <AuthLayout title="User registration....">
-        <form onSubmit={onSubmit}>
+        <form
+          className='animate__animated animate__fadeIn animate__faster'
+          onSubmit={onSubmit}>
           <Grid2 container>
             <Grid2 item='true' size={{ xs: 12 }} sx={{ mt: 2 }}>
               <TextField label='Nombre Completo' type="text" placeholder="Ingrese su nombre" fullWidth
@@ -94,7 +96,7 @@ export const RegisterPage = () => {
             </Grid2>
           </Grid2>
           <Grid2 container spacing={2} sx={{ mb: 2, mt: 1 }}>
-          
+
             <Grid2 item='true' size={{ xs: 12 }} sx={{ mt: 2 }} display={!!errorMessage ? 'block' : 'none'} justifyContent={'justify'}>
               <Alert severity="error"> {errorMessage} </Alert>
             </Grid2>
